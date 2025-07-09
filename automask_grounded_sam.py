@@ -29,10 +29,10 @@ OUTPUT_DIR = Path("outputs/grounded_sam2_hf_demo")
 DUMP_JSON_RESULTS = False
 
 class GroundedSAM2:
-    def __init__(self, grounding_model=GROUNDING_MODEL, text_prompt=TEXT_PROMPT, img_path=IMG_PATH, sam2_checkpoint=SAM2_CHECKPOINT, 
+    def __init__(self, grounding_model=GROUNDING_MODEL, img_path=IMG_PATH, sam2_checkpoint=SAM2_CHECKPOINT, 
                  sam2_model_config=SAM2_MODEL_CONFIG, output_dir=OUTPUT_DIR, no_dump_json=DUMP_JSON_RESULTS, force_cpu=True):
         self.grounding_model = grounding_model
-        self.text_prompt = text_prompt
+        self.text_prompt = None
         self.img_path = img_path
         self.sam2_checkpoint = sam2_checkpoint
         self.sam2_model_config = sam2_model_config
@@ -217,7 +217,8 @@ class GroundedSAM2:
     #         with open(os.path.join(OUTPUT_DIR, "grounded_sam2_hf_model_demo_results.json"), "w") as f:
     #             json.dump(results, f, indent=4)
 
-    def generate_mask(self,image):
+    def generate_mask(self,image,text):
+        self.text_prompt=text
         self.img = Image.fromarray(image)
         dino_results = self.call_grounding_dino()
         if dino_results[0]["boxes"].shape[0]==0:
