@@ -95,7 +95,7 @@ class GroundedSAM2:
         )
         return masks
 
-    def generate_annotated_frame(self, dino_results, sam2_masks):
+    def generate_annotated_frame(self, dino_results, sam2_masks,img=None):
         masks = sam2_masks
         results = dino_results
         # image = Image.open(self.img_path)
@@ -120,7 +120,8 @@ class GroundedSAM2:
         Visualize image with supervision useful API
         """
         # img = cv2.imread(self.img_path)
-        img = self.img
+        if img is None:
+            img = self.img
         detections = sv.Detections(
             xyxy=input_boxes,  # (n, 4)
             mask=masks.astype(bool),  # (n, h, w)
